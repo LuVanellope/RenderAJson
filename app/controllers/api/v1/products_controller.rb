@@ -1,8 +1,14 @@
 module Api
   module V1
     class ProductsController < ApplicationController
-      def index
-        render json: Product.all 
+
+      def create
+        @product = Product.new(product_params)
+        if @product.save
+          render json: @product, status: :created
+        else
+          render json: @product.errors, status: :unprocessable_entity
+        end
       end
 
       private
@@ -10,6 +16,7 @@ module Api
       def product_params
         params.permit(:name, :price)
       end
+
     end
   end
 end
